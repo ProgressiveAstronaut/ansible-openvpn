@@ -52,32 +52,9 @@
     creates: "{{ openvpn_rsa_ca_dir }}/{{ openvpn_server }}.key"
   tags: easy_rsa
 
-#- name: Generate CRL file
-#  shell: '. ./vars; $OPENSSL ca -gencrl -out {{ openvpn_rsa_ca_dir }}/crl.pem -config "$KEY_CONFIG"'
-#  environment:
-#    KEY_CN: ""
-#    KEY_OU: ""
-#    KEY_NAME: ""
-#    KEY_ALTNAMES: ""
-#  args:
-#    chdir: "{{ openvpn_easy_rsa_dir }}"
-#    creates: "{{ openvpn_rsa_ca_dir }}/crl.pem"
-#  tags: easy_rsa
-
-#- name: Generate client certificates and keys
-#  shell: ". ./vars; ./pkitool {{ item }} >/dev/null"
-#  args:
-#    chdir: "{{ easy_rsa_ca_dir }}"
-#    creates: "{{ easy_rsa_key_dir }}/{{ item }}.key"
-#  with_items: easy_rsa_clients
-#  tags: easy_rsa
-
-#- name: Create CA
-
-
-#- name: Generate the RSA keys
-#  command: openssl genrsa -out {{ item }}.key {{ openvpn_key_size }} creates={{ item }}.key
-##           chdir={{ openvpn_path }}
-#  with_items:
-#    - ca
-#    - server
+- name: Generate client certificates and keys
+  shell: ". ./vars; ./pkitool {{ item }} >/dev/null"
+  args:
+    chdir: "{{ openvpn_easy_rsa_dir }}"
+    creates: "{{ openvpn_rsa_ca_dir }}/client.key"
+  tags: easy_rsa
