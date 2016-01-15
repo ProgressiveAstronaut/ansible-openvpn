@@ -32,6 +32,12 @@
 - name: Create DH key
   command: openssl dhparam -out {{ openvpn_path }}/dh2048.pem 2048
 
+- name: Clean All
+  shell: ". ./vars; ./clean-all > /dev/null"
+  args:
+    chdir: "{{ openvpn_easy_rsa_dir }}"
+  tags: easy_rsa
+
 - name: Build CA
   shell: ". ./vars; ./pkitool --initca >/dev/null"
   args:
