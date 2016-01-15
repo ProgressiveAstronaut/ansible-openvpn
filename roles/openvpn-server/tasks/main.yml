@@ -18,6 +18,10 @@
   synchronize: mode=pull src=/usr/share/easy-rsa dest=/etc/openvpn/
   tags: configure
 
+- name: Copy server.conf file to OpenVPN directory
+  command: gunzip -c /usr/share/doc/openvpn/examples/sample-config-files/server.conf.gz > /etc/openvpn/server.conf
+  tags: configure
+
 - name: Create directory 
   file: path=/etc/openvpn/easy-rsa/keys state=directory
   tags: configure
