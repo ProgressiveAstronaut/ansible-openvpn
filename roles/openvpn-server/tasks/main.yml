@@ -31,14 +31,14 @@
 - name: Build CA
   shell: ". ./vars; ./pkitool --initca >/dev/null"
   args:
-    chdir: "{{ openvpn_rsa_ca_dir }}"
+    chdir: "{{ openvpn_easy_rsa_dir }}"
     creates: "{{ openvpn_rsa_ca_dir }}/ca.key"
   tags: easy_rsa
 
 - name: Generate server certificate and key
   shell: ". ./vars; ./pkitool --server {{ openvpn_server }} >/dev/null"
   args:
-    chdir: "{{ openvpn_rsa_ca_dir }}"
+    chdir: "{{ openvpn_easy_rsa_dir }}"
     creates: "{{ openvpn_rsa_ca_dir }}/{{ openvpn_server }}.key"
   tags: easy_rsa
 
@@ -50,7 +50,7 @@
     KEY_NAME: ""
     KEY_ALTNAMES: ""
   args:
-    chdir: "{{ easy_rsa_ca_dir }}"
+    chdir: "{{ openvpn_easy_rsa_dir }}"
     creates: "{{ easy_rsa_key_dir }}/crl.pem"
   tags: easy_rsa
 
