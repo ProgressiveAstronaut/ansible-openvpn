@@ -19,18 +19,18 @@
   tags: configure
 
 - name: Copy server.conf file to OpenVPN directory
-  command: gunzip -c /usr/share/doc/openvpn/examples/sample-config-files/server.conf.gz > /etc/openvpn/server.conf
+  template: src=server.conf.j2 dest={{ openvpn_path }}/server.conf
   tags: configure
 
 - name: Create directory 
-  file: path=/etc/openvpn/easy-rsa/keys state=directory
+  file: path={{ openvpn_rsa_ca_dir }} state=directory
   tags: configure
 
 - name: Copy easy-rsa vars file
-  template: src=vars.j2 dest=/etc/openvpn/easy-rsa/vars  
+  template: src=vars.j2 dest={{ openvpn_easy_rsa_dir }}/vars  
   tags: easy_rsa
 - name: Create DH key
-  command: openssl dhparam -out /etc/openvpn/dh2048.pem 2048
+  command: openssl dhparam -out {{ openvpn_path }}/dh2048.pem 2048
 
 - name: Build CA
   shell: ". ./vars; ./pkitool --initca >/dev/null"
