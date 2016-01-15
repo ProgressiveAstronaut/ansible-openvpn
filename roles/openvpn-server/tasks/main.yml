@@ -4,37 +4,42 @@
   with_items: 
      - openvpn
      - easy-rsa
+  tags: install
      
 - name: Set ip forwarding in the sysctl file and reload if necessary
   sysctl: name="net.ipv4.ip_forward" value=1 sysctl_set=yes state=present reload=yes
+  tags: configure 
 
 - name: Enable IPv4 traffic forwarding - (/proc/sys/net/ipv4/ip_forward)
   command: echo 1 > /proc/sys/net/ipv4/ip_forward
+  tags: configure
 
 - name: Copy easy-rsa files to OpenVPN directory
   synchronize: mode=pull src=/usr/share/easy-rsa dest=/etc/openvpn/
+  tags: configure
 
 - name: Create directory 
   file: path=/etc/openvpn/easy-rsa/keys state=directory
+  tags: configure
 
 - name: Copy easy-rsa vars file
   template: src=vars.j2 dest=/etc/openvpn/easy-rsa/vars  
-
+  tags: easy_rsa
 - name: Create DH key
   command: openssl dhparam -out /etc/openvpn/dh2048.pem 2048
 
 - name: Build CA
   shell: ". ./vars; ./pkitool --initca >/dev/null"
   args:
-    chdir: "{{ easy_rsa_ca_dir }}"
-    creates: "{{ easy_rsa_ca_dir }}/ca.key"
+    chdir: "{{ openvpn_rsa_ca_dir }}"
+    creates: "{{ openvpn_rsa_ca_dir }}/ca.key"
   tags: easy_rsa
 
 - name: Generate server certificate and key
   shell: ". ./vars; ./pkitool --server {{ openvpn_server }} >/dev/null"
   args:
-    chdir: "{{ easy_rsa_ca_dir }}"
-    creates: "{{ easy_rsa_key_dir }}/{{ openvpn_server }}.key"
+    chdir: "{{ openvpn_rsa_ca_dir }}"
+    creates: "{{ openvpn_rsa_ca_dir }}/{{ openvpn_server }}.key"
   tags: easy_rsa
 
 - name: Generate CRL file
