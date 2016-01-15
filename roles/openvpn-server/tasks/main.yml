@@ -23,6 +23,40 @@
 - name: Create DH key
   command: openssl dhparam -out /etc/openvpn/dh2048.pem 2048
 
+- name: Build CA
+  shell: ". ./vars; ./pkitool --initca >/dev/null"
+  args:
+    chdir: "{{ easy_rsa_ca_dir }}"
+    creates: "{{ easy_rsa_ca_dir }}/ca.key"
+  tags: easy_rsa
+
+- name: Generate server certificate and key
+  shell: ". ./vars; ./pkitool --server {{ openvpn_server }} >/dev/null"
+  args:
+    chdir: "{{ easy_rsa_ca_dir }}"
+    creates: "{{ easy_rsa_key_dir }}/{{ openvpn_server }}.key"
+  tags: easy_rsa
+
+- name: Generate CRL file
+  shell: '. ./vars; $OPENSSL ca -gencrl -out {{ easy_rsa_ca_dir }}/crl.pem -config "$KEY_CONFIG"'
+  environment:
+    KEY_CN: ""
+    KEY_OU: ""
+    KEY_NAME: ""
+    KEY_ALTNAMES: ""
+  args:
+    chdir: "{{ easy_rsa_ca_dir }}"
+    creates: "{{ easy_rsa_key_dir }}/crl.pem"
+  tags: easy_rsa
+
+#- name: Generate client certificates and keys
+#  shell: ". ./vars; ./pkitool {{ item }} >/dev/null"
+#  args:
+#    chdir: "{{ easy_rsa_ca_dir }}"
+#    creates: "{{ easy_rsa_key_dir }}/{{ item }}.key"
+#  with_items: easy_rsa_clients
+#  tags: easy_rsa
+
 #- name: Create CA
 
 
