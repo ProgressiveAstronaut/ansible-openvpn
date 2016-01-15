@@ -12,13 +12,17 @@
   command: echo 1 > /proc/sys/net/ipv4/ip_forward
 
 - name: Copy easy-rsa files to OpenVPN directory
-  synchronize: mode=pull src=/usr/share/easy-rsa dest=/etc/openvpn/ 
+  synchronize: mode=pull src=/usr/share/easy-rsa/ dest=/etc/openvpn 
 
 - name: Create directory 
   file: path=/etc/openvpn/easy-rsa/keys state=directory
 
 - name: Copy easy-rsa vars file
   template: src=vars.j2 dest=/etc/openvpn/easy-rsa/vars  
+
+- name: Create DH key
+  command: openssl dhparam -out /etc/openvpn/dh2048.pem 2048
+
 
 #- name: Generate the RSA keys
 #  command: openssl genrsa -out {{ item }}.key {{ openvpn_key_size }} creates={{ item }}.key
