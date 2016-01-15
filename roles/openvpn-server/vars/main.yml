@@ -17,3 +17,4 @@ openvpn_port: "1194"
 openvpn_protocol: "tcp"
 openvpn_easy_rsa_dir: "/etc/openvpn/easy-rsa"
 openvpn_rsa_ca_dir: "/etc/openvpn/easy-rsa/keys"
+openvpn_clients: [ client1 ]
