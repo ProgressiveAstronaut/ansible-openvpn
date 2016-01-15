@@ -11,9 +11,9 @@
 - name: Enable IPv4 traffic forwarding - (/proc/sys/net/ipv4/ip_forward)
   command: echo 1 > /proc/sys/net/ipv4/ip_forward
 
-- name: Generate the RSA keys
-  command: openssl genrsa -out {{ item }}.key {{ openvpn_key_size }} creates={{ item }}.key
-           chdir={{ openvpn_path }}
-  with_items:
-    - ca
-    - server
+#- name: Generate the RSA keys
+#  command: openssl genrsa -out {{ item }}.key {{ openvpn_key_size }} creates={{ item }}.key
+##           chdir={{ openvpn_path }}
+#  with_items:
+#    - ca
+#    - server
