@@ -73,3 +73,5 @@
     creates: "{{ openvpn_rsa_ca_dir }}/{{ item}}.key"
   with_items: "{{ openvpn_clients }}"  
   tags: easy_rsa
+
+  
